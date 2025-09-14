@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🧭 Lienzo: Plantilla de Viajes de Usuario (UX)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print { .no-print { display:none!important; } }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <header class="bg-white/80 backdrop-blur sticky top-0 z-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">🧭 Plantilla de Viajes de Usuario UX</h1>
+      <div class="flex gap-2 no-print">
+        <input id="fileJSON" type="file" accept="application/json,.json" class="hidden" />
+        <button id="importJSON" class="px-3 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700 text-sm font-semibold" title="Importa un archivo JSON con viajes de usuario guardados">Importar JSON</button>
+        <button id="exportJSON" class="px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold" title="Exporta tus viajes de usuario como archivo JSON">Exportar JSON</button>
+        <button id="clearAll" class="px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700 text-sm font-semibold" title="Vacía todo el backlog almacenado en el navegador">Vaciar</button>
+        <button id="printBtn" class="px-3 py-2 rounded-xl bg-slate-800 text-white hover:bg-black text-sm font-semibold" title="Imprime o guarda en PDF tu viaje de usuario">Imprimir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 grid lg:grid-cols-3 gap-6">
+    <!-- Formulario -->
+    <section class="lg:col-span-2">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-200">
+          <h2 class="text-xl font-semibold">Crear Viaje de Usuario</h2>
+        </div>
+        <form id="journeyForm" class="p-5 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="persona" title="Persona o arquetipo que realiza el viaje">Persona ℹ️</label>
+            <input id="persona" name="persona" type="text" required placeholder="Ej: Estudiante, Cliente frecuente" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="objetivo" title="Meta principal del usuario en este viaje">Objetivo ℹ️</label>
+            <input id="objetivo" name="objetivo" type="text" required placeholder="Ej: Comprar un producto, Registrarse" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="etapa" title="Etapa del viaje">Etapa ℹ️</label>
+            <input id="etapa" name="etapa" type="text" required placeholder="Descubrimiento / Consideración / Uso / Post-servicio" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="touchpoints" title="Puntos de contacto con el producto o servicio">Touchpoints ℹ️</label>
+            <input id="touchpoints" name="touchpoints" type="text" placeholder="App, Web, Tienda física..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="pensamientos" title="Pensamientos del usuario en esta etapa">Pensamientos ℹ️</label>
+            <textarea id="pensamientos" name="pensamientos" rows="2" placeholder="¿Qué está pensando la persona?" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="emociones" title="Emociones clave en esta etapa">Emociones ℹ️</label>
+            <textarea id="emociones" name="emociones" rows="2" placeholder="Frustración, entusiasmo, alivio..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="intensidad" title="Intensidad emocional (1=negativa, 5=positiva)">Intensidad Emocional ℹ️</label>
+            <input id="intensidad" name="intensidad" type="number" min="1" max="5" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="oportunidades" title="Oportunidades de mejora detectadas en esta etapa">Oportunidades ℹ️</label>
+            <textarea id="oportunidades" name="oportunidades" rows="2" placeholder="Ideas de mejora..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
+          </div>
+          <div class="md:col-span-2 flex flex-wrap gap-3 pt-2 no-print">
+            <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700">Agregar etapa</button>
+            <button type="reset" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">Limpiar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Tips -->
+    <aside class="space-y-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-lg mb-3">📌 Consejos para Viajes de Usuario UX</h3>
+        <ul class="text-sm list-disc list-inside space-y-1">
+          <li>Un viaje de usuario muestra de forma integral la experiencia en varias etapas.</li>
+          <li>Incluye siempre el objetivo principal de la persona y sus interacciones clave.</li>
+          <li>Considera emociones e intensidad para detectar momentos críticos.</li>
+          <li>Agrega oportunidades de mejora para vincular el análisis con acciones.</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-lg mb-3">💾 Guardado</h3>
+        <p class="text-sm">Los viajes se almacenan en tu navegador (<code>localStorage</code>). Puedes importar o exportar JSON para compartirlos.</p>
+      </div>
+    </aside>
+
+    <!-- Visualizador -->
+    <section class="lg:col-span-3">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <h3 class="text-lg font-semibold">👀 Visualizador de Viaje de Usuario</h3>
+        <div id="visualizer" class="mt-4 overflow-x-auto text-sm text-slate-500">Sin elementos para visualizar.</div>
+      </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="lg:col-span-3">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Backlog de Viajes de Usuario</h2>
+          <div class="text-xs text-slate-500">ID autogenerado (VJ-001, VJ-002...)</div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" id="journeyTable">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="px-3 py-2 text-left">ID ℹ️</th>
+                <th class="px-3 py-2 text-left">Persona ℹ️</th>
+                <th class="px-3 py-2 text-left">Objetivo ℹ️</th>
+                <th class="px-3 py-2 text-left">Etapa ℹ️</th>
+                <th class="px-3 py-2 text-left">Touchpoints ℹ️</th>
+                <th class="px-3 py-2 text-left">Pensamientos ℹ️</th>
+                <th class="px-3 py-2 text-left">Emociones ℹ️</th>
+                <th class="px-3 py-2 text-left">Intensidad ℹ️</th>
+                <th class="px-3 py-2 text-left">Oportunidades ℹ️</th>
+                <th class="px-3 py-2 text-left no-print">Acciones ℹ️</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form=document.getElementById('journeyForm');
+    const tbody=document.getElementById('tbody');
+    const KEY='userJourneys';
+    const VIS=document.getElementById('visualizer');
+
+    function loadRows(){tbody.innerHTML='';}
+    function nextId(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');return `VJ-${String(d.length+1).padStart(3,'0')}`;}
+    function addRow(j){const tr=document.createElement('tr');tr.className='border-b border-slate-200';tr.innerHTML=`<td class='px-3 py-2 font-semibold'>${j.id}</td><td class='px-3 py-2'>${j.persona}</td><td class='px-3 py-2'>${j.objetivo}</td><td class='px-3 py-2'>${j.etapa}</td><td class='px-3 py-2'>${j.touchpoints}</td><td class='px-3 py-2'>${j.pensamientos}</td><td class='px-3 py-2'>${j.emociones}</td><td class='px-3 py-2'>${j.intensidad||''}</td><td class='px-3 py-2'>${j.oportunidades}</td><td class='px-3 py-2 no-print'><button class='text-rose-700 text-xs' data-id='${j.id}'>Eliminar</button></td>`;tbody.appendChild(tr);} 
+    function save(j){const d=JSON.parse(localStorage.getItem(KEY)||'[]');d.push(j);localStorage.setItem(KEY,JSON.stringify(d));}
+    function removeById(id){const d=JSON.parse(localStorage.getItem(KEY)||'[]').filter(x=>x.id!==id);localStorage.setItem(KEY,JSON.stringify(d));loadFromStorage();}
+    function loadFromStorage(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');tbody.innerHTML='';d.forEach(addRow);} 
+
+    function renderVisual(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');if(!d.length){VIS.innerHTML='<div class="text-sm text-slate-500">Sin elementos para visualizar.</div>';return;}VIS.innerHTML=`<div class='min-w-max flex gap-4'>${d.map(j=>`<div class='w-72 bg-white border border-slate-200 rounded-xl p-4 shadow-sm'><h4 class='font-semibold mb-1'>${j.persona} – ${j.objetivo}</h4><div class='text-sm'><span class='font-medium'>Etapa:</span> ${j.etapa}</div><div class='text-sm'><span class='font-medium'>Touchpoints:</span> ${j.touchpoints}</div>${j.pensamientos?`<div class='text-xs mt-1'><span class='font-medium'>Pensamientos:</span> ${j.pensamientos}</div>`:''}${j.emociones?`<div class='text-xs mt-1'><span class='font-medium'>Emociones:</span> ${j.emociones} (Intensidad: ${j.intensidad||'-'})</div>`:''}${j.oportunidades?`<div class='text-xs mt-1 text-emerald-700'><span class='font-medium'>Oportunidades:</span> ${j.oportunidades}</div>`:''}</div>`).join('')}</div>`;}
+
+    form.addEventListener('submit',e=>{e.preventDefault();const j={id:nextId(),persona:form.persona.value.trim(),objetivo:form.objetivo.value.trim(),etapa:form.etapa.value.trim(),touchpoints:form.touchpoints.value.trim(),pensamientos:form.pensamientos.value.trim(),emociones:form.emociones.value.trim(),intensidad:form.intensidad.value, oportunidades:form.oportunidades.value.trim()};if(!j.persona||!j.objetivo||!j.etapa){alert('Completa persona, objetivo y etapa');return;}save(j);addRow(j);renderVisual();form.reset();});
+    tbody.addEventListener('click',e=>{const id=e.target.getAttribute('data-id');if(id&&confirm('¿Eliminar '+id+'?')){removeById(id);renderVisual();}});
+
+    document.getElementById('exportJSON').addEventListener('click',()=>{const d=JSON.parse(localStorage.getItem(KEY)||'[]');if(!d.length)return alert('Nada que exportar');const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='viajes_usuario.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),500);});
+    document.getElementById('clearAll').addEventListener('click',()=>{if(confirm('¿Vaciar todos los viajes?')){localStorage.removeItem(KEY);loadRows();renderVisual();}});
+    document.getElementById('importJSON').addEventListener('click',()=>document.getElementById('fileJSON').click());
+    document.getElementById('fileJSON').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const arr=JSON.parse(await f.text());if(!Array.isArray(arr))return alert('El JSON debe ser un arreglo');arr.forEach(x=>{save(x);addRow(x);});renderVisual();}catch(err){alert('Error: '+err.message);}finally{e.target.value='';}});
+    document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+    loadRows();
+    renderVisual();
+  </script>
+</body>
+</html>
