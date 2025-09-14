@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @media print { .no-print { display:none!important; } }
+    .error { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
@@ -15,54 +16,153 @@
       <h1 class="text-2xl md:text-3xl font-bold tracking-tight">🧭 Plantilla de Viajes de Usuario UX</h1>
       <div class="flex gap-2 no-print">
         <input id="fileJSON" type="file" accept="application/json,.json" class="hidden" />
-        <button id="importJSON" class="px-3 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700 text-sm font-semibold" title="Importa un archivo JSON con viajes de usuario guardados">Importar JSON</button>
-        <button id="exportJSON" class="px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold" title="Exporta tus viajes de usuario como archivo JSON">Exportar JSON</button>
-        <button id="clearAll" class="px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700 text-sm font-semibold" title="Vacía todo el backlog almacenado en el navegador">Vaciar</button>
-        <button id="printBtn" class="px-3 py-2 rounded-xl bg-slate-800 text-white hover:bg-black text-sm font-semibold" title="Imprime o guarda en PDF tu viaje de usuario">Imprimir</button>
+        <button id="importJSON" class="px-3 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700 text-sm font-semibold" title="Importa un archivo JSON con tus viajes">Importar JSON</button>
+        <button id="exportJSON" class="px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-semibold" title="Exporta el viaje actual a JSON">Exportar JSON</button>
+        <button id="clearAll" class="px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700 text-sm font-semibold" title="Vacía todo">Vaciar</button>
+        <button id="printBtn" class="px-3 py-2 rounded-xl bg-slate-800 text-white hover:bg-black text-sm font-semibold" title="Imprimir / PDF">Imprimir</button>
       </div>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 py-6 grid lg:grid-cols-3 gap-6">
-    <!-- Formulario -->
+    <!-- Formulario principal -->
     <section class="lg:col-span-2">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200">
-          <h2 class="text-xl font-semibold">Crear Viaje de Usuario</h2>
+          <h2 class="text-xl font-semibold">Crear/Agregar etapa del Viaje</h2>
         </div>
         <form id="journeyForm" class="p-5 grid md:grid-cols-2 gap-4">
+          <!-- Fase como campo de texto -->
           <div>
-            <label class="block text-sm font-medium mb-1" for="persona" title="Persona o arquetipo que realiza el viaje">Persona ℹ️</label>
-            <input id="persona" name="persona" type="text" required placeholder="Ej: Estudiante, Cliente frecuente" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+            <label for="fase" class="block text-sm font-medium mb-1">Fase</label>
+            <input id="fase" name="fase" type="text" placeholder="Ej: Antes, Durante, Después, Onboarding, etc." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" required />
+          </div>
+          <!-- Descripción corta de la etapa -->
+          <div>
+            <label for="descripcion" class="block text-sm font-medium mb-1">Descripción</label>
+            <input id="descripcion" name="descripcion" type="text" placeholder="Breve descripción de la etapa" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" required/>
+          </div>
+
+          <!-- Touchpoint (select con grupos) -->
+          <div class="md:col-span-2">
+            <label for="touchpoint" class="block text-sm font-medium mb-1">Touchpoint</label>
+            <select id="touchpoint" name="touchpoint" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" required>
+              <option value="">Selecciona un touchpoint…</option>
+              <optgroup label="🔑 Acceso y autenticación">
+                <option>Pantalla de inicio de sesión 🔑</option>
+                <option>Registro / creación de cuenta 📝</option>
+                <option>Recuperación de contraseña / autenticación de dos pasos 📲</option>
+              </optgroup>
+              <optgroup label="🧭 Navegación y exploración">
+                <option>Menú principal / barra de navegación 📂</option>
+                <option>Buscador 🔍</option>
+                <option>Menús desplegables 📑</option>
+                <option>Filtros y ordenamientos 🗂️</option>
+                <option>Breadcrumbs / rutas de navegación 🧵</option>
+              </optgroup>
+              <optgroup label="🛠️ Interacciones principales">
+                <option>Botones CTA (Call To Action) 👉</option>
+                <option>Formularios (inputs, selectores, checkboxes) 📝</option>
+                <option>Carruseles de imágenes o productos 🖼️</option>
+                <option>Scroll infinito o paginación 📜</option>
+                <option>Mapas interactivos 🗺️</option>
+                <option>Chatbots o asistentes 💬</option>
+              </optgroup>
+              <optgroup label="💬 Comunicación y feedback">
+                <option>Notificaciones push 🔔</option>
+                <option>Pop-ups / modales emergentes 📢</option>
+                <option>Mensajes de error ⚠️</option>
+                <option>Tooltips ℹ️</option>
+                <option>Confirmaciones y validaciones ✅</option>
+                <option>Encuestas rápidas o NPS 📊</option>
+              </optgroup>
+              <optgroup label="💳 Transacciones">
+                <option>Carrito de compras 🛒</option>
+                <option>Checkout / proceso de pago 💳</option>
+                <option>Métodos de pago alternativos (PayPal, Apple Pay, etc.) 🪙</option>
+                <option>Confirmación de compra 📩</option>
+                <option>Seguimiento de envío 🚚</option>
+              </optgroup>
+              <optgroup label="👤 Gestión del usuario">
+                <option>Perfil del usuario 👤</option>
+                <option>Configuración y preferencias ⚙️</option>
+                <option>Historial de actividades 🗃️</option>
+                <option>Favoritos o listas guardadas ⭐</option>
+                <option>Suscripciones y membresías 🎟️</option>
+              </optgroup>
+              <optgroup label="📈 Soporte y acompañamiento">
+                <option>Centro de ayuda ❓</option>
+                <option>Preguntas frecuentes 📚</option>
+                <option>Chat en vivo o tickets de soporte 🎧</option>
+                <option>Foros / comunidad 👥</option>
+                <option>Tutoriales o tours guiados 🎥</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Sensaciones y Recomendaciones -->
+          <div>
+            <label for="sensaciones" class="block text-sm font-medium mb-1">Sensaciones</label>
+            <textarea id="sensaciones" name="sensaciones" rows="2" placeholder="¿Qué sensaciones provoca esta etapa?" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1" for="objetivo" title="Meta principal del usuario en este viaje">Objetivo ℹ️</label>
-            <input id="objetivo" name="objetivo" type="text" required placeholder="Ej: Comprar un producto, Registrarse" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+            <label for="recomendaciones" class="block text-sm font-medium mb-1">Recomendaciones</label>
+            <textarea id="recomendaciones" name="recomendaciones" rows="2" placeholder="Mejoras accionables para esta etapa" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
           </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="etapa" title="Etapa del viaje">Etapa ℹ️</label>
-            <input id="etapa" name="etapa" type="text" required placeholder="Descubrimiento / Consideración / Uso / Post-servicio" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
+
+          <!-- Recorrido emocional (mini línea de tiempo) -->
+          <div class="md:col-span-2">
+            <h3 class="font-semibold">🧠 Recorrido emocional (mini línea de tiempo)</h3>
+            <div class="grid md:grid-cols-4 gap-3 mt-2">
+              <div class="md:col-span-2">
+                <label for="ev_evento" class="block text-sm font-medium mb-1">Evento/Hito</label>
+                <input id="ev_evento" type="text" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" placeholder="Ej: Ve la oferta destacada" />
+              </div>
+              <div>
+                <label for="ev_necesidad" class="block text-sm font-medium mb-1">Necesidad</label>
+                <select id="ev_necesidad" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500">
+                  <option value="">Selecciona…</option>
+                  <option>Rapidez / eficiencia ⚡</option>
+                  <option>Seguridad / confianza 🔒</option>
+                  <option>Soporte / acompañamiento 💬</option>
+                  <option>Claridad / simplicidad 📝</option>
+                  <option>Accesibilidad / usabilidad 📱</option>
+                  <option>Satisfacción / logro ✅</option>
+                  <option>Ahorro / costo-beneficio 💰</option>
+                  <option>Conectividad / disponibilidad 📶</option>
+                  <option>Personalización / adaptación 🎨</option>
+                  <option>Control / autonomía ⚙️</option>
+                </select>
+              </div>
+              <div>
+                <label for="ev_emocion" class="block text-sm font-medium mb-1">Emoción</label>
+                <select id="ev_emocion" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500">
+                  <option value="">Selecciona…</option>
+                  <option>🙂 Satisfecho / contento</option>
+                  <option>😟 Preocupado / inseguro</option>
+                  <option>😠 Frustrado / molesto</option>
+                  <option>😍 Encantado / muy feliz</option>
+                  <option>🤯 Abrumado / confundido</option>
+                  <option>😐 Neutral / indiferente</option>
+                  <option>😢 Triste / decepcionado</option>
+                  <option>😤 Irritado / impaciente</option>
+                  <option>😎 Confiado / seguro</option>
+                  <option>🤔 Pensativo / evaluando</option>
+                </select>
+              </div>
+              <div class="md:col-span-4">
+                <label for="ev_pensamiento" class="block text-sm font-medium mb-1">Pensamiento 💭</label>
+                <input id="ev_pensamiento" type="text" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" placeholder="¿Qué piensa en ese hito?" />
+              </div>
+              <div class="md:col-span-4 no-print">
+                <button id="addRecorrido" type="button" class="px-3 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700 text-sm font-semibold">Agregar al recorrido</button>
+                <button id="clearRecorrido" type="button" class="ml-2 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">Limpiar recorrido</button>
+              </div>
+              <div id="recorridoPreview" class="md:col-span-4 text-sm text-slate-600"></div>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="touchpoints" title="Puntos de contacto con el producto o servicio">Touchpoints ℹ️</label>
-            <input id="touchpoints" name="touchpoints" type="text" placeholder="App, Web, Tienda física..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="pensamientos" title="Pensamientos del usuario en esta etapa">Pensamientos ℹ️</label>
-            <textarea id="pensamientos" name="pensamientos" rows="2" placeholder="¿Qué está pensando la persona?" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="emociones" title="Emociones clave en esta etapa">Emociones ℹ️</label>
-            <textarea id="emociones" name="emociones" rows="2" placeholder="Frustración, entusiasmo, alivio..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="intensidad" title="Intensidad emocional (1=negativa, 5=positiva)">Intensidad Emocional ℹ️</label>
-            <input id="intensidad" name="intensidad" type="number" min="1" max="5" class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="oportunidades" title="Oportunidades de mejora detectadas en esta etapa">Oportunidades ℹ️</label>
-            <textarea id="oportunidades" name="oportunidades" rows="2" placeholder="Ideas de mejora..." class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-indigo-500"></textarea>
-          </div>
+
+          <!-- Acciones -->
           <div class="md:col-span-2 flex flex-wrap gap-3 pt-2 no-print">
             <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700">Agregar etapa</button>
             <button type="reset" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">Limpiar</button>
@@ -74,29 +174,32 @@
     <!-- Tips -->
     <aside class="space-y-6">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-        <h3 class="font-semibold text-lg mb-3">📌 Consejos para Viajes de Usuario UX</h3>
+        <h3 class="font-semibold text-lg mb-3">📌 Consejos</h3>
         <ul class="text-sm list-disc list-inside space-y-1">
-          <li>Un viaje de usuario muestra de forma integral la experiencia en varias etapas.</li>
-          <li>Incluye siempre el objetivo principal de la persona y sus interacciones clave.</li>
-          <li>Considera emociones e intensidad para detectar momentos críticos.</li>
-          <li>Agrega oportunidades de mejora para vincular el análisis con acciones.</li>
+          <li>Usa <strong>fases personalizadas</strong> (p. ej., "Descubrimiento", "Uso", "Post-servicio").</li>
+          <li>Elige un <strong>touchpoint</strong> representativo por etapa.</li>
+          <li>En el <strong>recorrido emocional</strong>, sé concreto: evento, necesidad, emoción y 💭 pensamiento.</li>
+          <li>Redacta <strong>recomendaciones</strong> accionables (qué, para quién, por qué).</li>
         </ul>
       </div>
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
         <h3 class="font-semibold text-lg mb-3">💾 Guardado</h3>
-        <p class="text-sm">Los viajes se almacenan en tu navegador (<code>localStorage</code>). Puedes importar o exportar JSON para compartirlos.</p>
+        <p class="text-sm">Se almacena en <code>localStorage</code>. Exporta/Importa JSON para compartir.</p>
       </div>
     </aside>
 
-    <!-- Visualizador -->
+    <!-- Visualizador: tabla con columnas DINÁMICAS por fase -->
     <section class="lg:col-span-3">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-        <h3 class="text-lg font-semibold">👀 Visualizador de Viaje de Usuario</h3>
-        <div id="visualizer" class="mt-4 overflow-x-auto text-sm text-slate-500">Sin elementos para visualizar.</div>
+        <h3 class="text-lg font-semibold">👀 Visualizador (fases dinámicas)</h3>
+        <div class="overflow-x-auto" id="vizContainer">
+          <!-- La tabla se genera dinámicamente vía JS -->
+          <div class="text-sm text-slate-500" id="vizEmpty">Aún no hay etapas. Agrega la primera para ver las fases.</div>
+        </div>
       </div>
     </section>
 
-    <!-- Tabla -->
+    <!-- Backlog -->
     <section class="lg:col-span-3">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
@@ -107,16 +210,14 @@
           <table class="w-full text-sm" id="journeyTable">
             <thead class="bg-slate-100">
               <tr>
-                <th class="px-3 py-2 text-left">ID ℹ️</th>
-                <th class="px-3 py-2 text-left">Persona ℹ️</th>
-                <th class="px-3 py-2 text-left">Objetivo ℹ️</th>
-                <th class="px-3 py-2 text-left">Etapa ℹ️</th>
-                <th class="px-3 py-2 text-left">Touchpoints ℹ️</th>
-                <th class="px-3 py-2 text-left">Pensamientos ℹ️</th>
-                <th class="px-3 py-2 text-left">Emociones ℹ️</th>
-                <th class="px-3 py-2 text-left">Intensidad ℹ️</th>
-                <th class="px-3 py-2 text-left">Oportunidades ℹ️</th>
-                <th class="px-3 py-2 text-left no-print">Acciones ℹ️</th>
+                <th class="px-3 py-2 text-left">ID</th>
+                <th class="px-3 py-2 text-left">Fase</th>
+                <th class="px-3 py-2 text-left">Descripción</th>
+                <th class="px-3 py-2 text-left">Touchpoint</th>
+                <th class="px-3 py-2 text-left">Sensaciones</th>
+                <th class="px-3 py-2 text-left">Recomendaciones</th>
+                <th class="px-3 py-2 text-left">Recorrido emocional</th>
+                <th class="px-3 py-2 text-left no-print">Acciones</th>
               </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -127,31 +228,203 @@
   </main>
 
   <script>
+    // ===== Estado y claves =====
+    const KEY='userJourneys_v2';
+
+    // ===== Refs DOM =====
     const form=document.getElementById('journeyForm');
     const tbody=document.getElementById('tbody');
-    const KEY='userJourneys';
-    const VIS=document.getElementById('visualizer');
+    const recPrev=document.getElementById('recorridoPreview');
+    const vizContainer=document.getElementById('vizContainer');
+    const vizEmpty=document.getElementById('vizEmpty');
 
-    function loadRows(){tbody.innerHTML='';}
-    function nextId(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');return `VJ-${String(d.length+1).padStart(3,'0')}`;}
-    function addRow(j){const tr=document.createElement('tr');tr.className='border-b border-slate-200';tr.innerHTML=`<td class='px-3 py-2 font-semibold'>${j.id}</td><td class='px-3 py-2'>${j.persona}</td><td class='px-3 py-2'>${j.objetivo}</td><td class='px-3 py-2'>${j.etapa}</td><td class='px-3 py-2'>${j.touchpoints}</td><td class='px-3 py-2'>${j.pensamientos}</td><td class='px-3 py-2'>${j.emociones}</td><td class='px-3 py-2'>${j.intensidad||''}</td><td class='px-3 py-2'>${j.oportunidades}</td><td class='px-3 py-2 no-print'><button class='text-rose-700 text-xs' data-id='${j.id}'>Eliminar</button></td>`;tbody.appendChild(tr);} 
-    function save(j){const d=JSON.parse(localStorage.getItem(KEY)||'[]');d.push(j);localStorage.setItem(KEY,JSON.stringify(d));}
-    function removeById(id){const d=JSON.parse(localStorage.getItem(KEY)||'[]').filter(x=>x.id!==id);localStorage.setItem(KEY,JSON.stringify(d));loadFromStorage();}
-    function loadFromStorage(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');tbody.innerHTML='';d.forEach(addRow);} 
+    // Recorrido emocional en memoria (antes de anexarlo a la etapa)
+    let recorridoTmp=[];
 
-    function renderVisual(){const d=JSON.parse(localStorage.getItem(KEY)||'[]');if(!d.length){VIS.innerHTML='<div class="text-sm text-slate-500">Sin elementos para visualizar.</div>';return;}VIS.innerHTML=`<div class='min-w-max flex gap-4'>${d.map(j=>`<div class='w-72 bg-white border border-slate-200 rounded-xl p-4 shadow-sm'><h4 class='font-semibold mb-1'>${j.persona} – ${j.objetivo}</h4><div class='text-sm'><span class='font-medium'>Etapa:</span> ${j.etapa}</div><div class='text-sm'><span class='font-medium'>Touchpoints:</span> ${j.touchpoints}</div>${j.pensamientos?`<div class='text-xs mt-1'><span class='font-medium'>Pensamientos:</span> ${j.pensamientos}</div>`:''}${j.emociones?`<div class='text-xs mt-1'><span class='font-medium'>Emociones:</span> ${j.emociones} (Intensidad: ${j.intensidad||'-'})</div>`:''}${j.oportunidades?`<div class='text-xs mt-1 text-emerald-700'><span class='font-medium'>Oportunidades:</span> ${j.oportunidades}</div>`:''}</div>`).join('')}</div>`;}
+    // ===== Utilidades =====
+    function nextId(){
+      const data=JSON.parse(localStorage.getItem(KEY)||'[]');
+      return `VJ-${String(data.length+1).padStart(3,'0')}`;
+    }
+    function escapeHtml(s){
+      return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+    }
 
-    form.addEventListener('submit',e=>{e.preventDefault();const j={id:nextId(),persona:form.persona.value.trim(),objetivo:form.objetivo.value.trim(),etapa:form.etapa.value.trim(),touchpoints:form.touchpoints.value.trim(),pensamientos:form.pensamientos.value.trim(),emociones:form.emociones.value.trim(),intensidad:form.intensidad.value, oportunidades:form.oportunidades.value.trim()};if(!j.persona||!j.objetivo||!j.etapa){alert('Completa persona, objetivo y etapa');return;}save(j);addRow(j);renderVisual();form.reset();});
-    tbody.addEventListener('click',e=>{const id=e.target.getAttribute('data-id');if(id&&confirm('¿Eliminar '+id+'?')){removeById(id);renderVisual();}});
+    // ===== Render helpers =====
+    function renderRecorridoInline(list){
+      if(!list?.length) return '<span class="text-slate-400">Sin recorrido</span>';
+      return `<div class='min-w-max flex items-center gap-2'>${list.map((it,i)=>`
+        <div class='w-64 bg-white border border-slate-200 rounded-xl p-3 shadow-sm'>
+          <div class='text-center'>
+            <div class='text-xs text-slate-500 flex items-center justify-center gap-2'><span class='inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white font-medium'>${i+1}</span>Hito</div>
+            <div class='mt-1 font-semibold'>${escapeHtml(it.evento)}</div>
+          </div>
+          <div class='mt-2 text-center text-sm space-y-1'>
+            ${it.necesidad?`<div><span class='inline-flex items-center gap-1 px-2 py-1 rounded-full border bg-white'>${escapeHtml(it.necesidad)}</span></div>`:''}
+            <div>${it.emocion?escapeHtml(it.emocion):''} ${it.pensamiento?`<span class='ml-1'>💭 ${escapeHtml(it.pensamiento)}</span>`:''}</div>
+          </div>
+        </div>
+        ${i<list.length-1?`<div class='text-slate-400'>→</div>`:''}
+      `).join('')}</div>`;
+    }
 
-    document.getElementById('exportJSON').addEventListener('click',()=>{const d=JSON.parse(localStorage.getItem(KEY)||'[]');if(!d.length)return alert('Nada que exportar');const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='viajes_usuario.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),500);});
-    document.getElementById('clearAll').addEventListener('click',()=>{if(confirm('¿Vaciar todos los viajes?')){localStorage.removeItem(KEY);loadRows();renderVisual();}});
+    function cardEtapa(j){
+      return `<div class='mb-3 last:mb-0'>
+        <div class='bg-slate-50 border border-slate-200 rounded-xl p-3'>
+          <div class='font-semibold mb-1'>${escapeHtml(j.descripcion)}</div>
+          <div class='text-xs text-slate-600'><span class='font-medium'>Touchpoint:</span> ${escapeHtml(j.touchpoint)}</div>
+          ${j.sensaciones?`<div class='text-xs mt-1'><span class='font-medium'>Sensaciones:</span> ${escapeHtml(j.sensaciones)}</div>`:''}
+          ${j.recomendaciones?`<div class='text-xs mt-1 text-emerald-700'><span class='font-medium'>Recomendaciones:</span> ${escapeHtml(j.recomendaciones)}</div>`:''}
+          <div class='mt-2'>${renderRecorridoInline(j.recorrido)}</div>
+        </div>
+      </div>`;
+    }
+
+    function renderVisualizer(){
+      const data=JSON.parse(localStorage.getItem(KEY)||'[]');
+      if(!data.length){
+        vizContainer.innerHTML = '<div class="text-sm text-slate-500">Aún no hay etapas. Agrega la primera para ver las fases.</div>';
+        return;
+      }
+      // Obtener fases únicas preservando el orden de primera aparición
+      const phases=[]; const seen=new Set();
+      for(const j of data){ const f=(j.fase||'').trim(); if(f && !seen.has(f)){ seen.add(f); phases.push(f); } }
+      if(!phases.length){
+        vizContainer.innerHTML = '<div class="text-sm text-slate-500">Agrega una fase para construir la tabla.</div>';
+        return;
+      }
+      const colsHtml = phases.map(p=>`<th class='px-3 py-2 text-left'>${escapeHtml(p)}</th>`).join('');
+      const cellsHtml = phases.map(p=>{
+        const items = data.filter(j=> (j.fase||'').trim()===p);
+        const content = items.length ? items.map(cardEtapa).join('') : `<span class='text-slate-500'>Sin elementos</span>`;
+        return `<td class='align-top px-3 py-3'>${content}</td>`;
+      }).join('');
+      vizContainer.innerHTML = `
+        <table class='w-full text-sm'>
+          <thead class='bg-slate-100'><tr>${colsHtml}</tr></thead>
+          <tbody><tr>${cellsHtml}</tr></tbody>
+        </table>`;
+    }
+
+    function addRow(j){
+      const tr=document.createElement('tr');
+      tr.className='border-b border-slate-200 align-top';
+      tr.innerHTML=`
+        <td class='px-3 py-2 font-semibold'>${j.id}</td>
+        <td class='px-3 py-2'>${escapeHtml(j.fase)}</td>
+        <td class='px-3 py-2'>${escapeHtml(j.descripcion)}</td>
+        <td class='px-3 py-2'>${escapeHtml(j.touchpoint)}</td>
+        <td class='px-3 py-2'>${escapeHtml(j.sensaciones||'')}</td>
+        <td class='px-3 py-2'>${escapeHtml(j.recomendaciones||'')}</td>
+        <td class='px-3 py-2'>${renderRecorridoInline(j.recorrido)}</td>
+        <td class='px-3 py-2 no-print'><button class='text-rose-700 text-xs' data-id='${j.id}'>Eliminar</button></td>`;
+      tbody.appendChild(tr);
+    }
+
+    function loadFromStorage(){
+      const data=JSON.parse(localStorage.getItem(KEY)||'[]');
+      tbody.innerHTML='';
+      data.forEach(addRow);
+      renderVisualizer();
+    }
+
+    function save(j){
+      const data=JSON.parse(localStorage.getItem(KEY)||'[]');
+      data.push(j);
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+
+    function removeById(id){
+      const data=(JSON.parse(localStorage.getItem(KEY)||'[]')).filter(x=>x.id!==id);
+      localStorage.setItem(KEY, JSON.stringify(data));
+      loadFromStorage();
+    }
+
+    // ===== Recorrido emocional (UI) =====
+    const evEvento=document.getElementById('ev_evento');
+    const evNecesidad=document.getElementById('ev_necesidad');
+    const evEmocion=document.getElementById('ev_emocion');
+    const evPensamiento=document.getElementById('ev_pensamiento');
+
+    function renderRecorridoPreview(){
+      recPrev.innerHTML = renderRecorridoInline(recorridoTmp);
+    }
+
+    document.getElementById('addRecorrido').addEventListener('click',()=>{
+      const item={
+        evento: evEvento.value.trim(),
+        necesidad: evNecesidad.value,
+        emocion: evEmocion.value,
+        pensamiento: evPensamiento.value.trim()
+      };
+      if(!item.evento || !item.necesidad || !item.emocion){
+        [evEvento,evNecesidad,evEmocion].forEach(el=>{ if(!el.value || !el.value.trim()){ el.classList.add('error'); } else { el.classList.remove('error'); }});
+        alert('Completa Evento, Necesidad y Emoción del recorrido');
+        return;
+      }
+      [evEvento,evNecesidad,evEmocion].forEach(el=>el.classList.remove('error'));
+      recorridoTmp.push(item);
+      evEvento.value=''; evNecesidad.value=''; evEmocion.value=''; evPensamiento.value='';
+      renderRecorridoPreview();
+    });
+
+    document.getElementById('clearRecorrido').addEventListener('click',()=>{
+      recorridoTmp=[]; renderRecorridoPreview();
+    });
+
+    // ===== Form principal =====
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const fase=form.fase.value.trim();
+      const descripcion=form.descripcion.value.trim();
+      const touchpoint=form.touchpoint.value;
+      const sensaciones=form.sensaciones.value.trim();
+      const recomendaciones=form.recomendaciones.value.trim();
+      let valid=true;
+      [['fase',fase],['descripcion',descripcion],['touchpoint',touchpoint]].forEach(([id,val])=>{
+        const el=form[id]; if(!val){ el.classList.add('error'); valid=false; } else el.classList.remove('error');
+      });
+      if(!valid){ alert('Completa Fase, Descripción y Touchpoint'); return; }
+      const j={ id: nextId(), fase, descripcion, touchpoint, sensaciones, recomendaciones, recorrido: [...recorridoTmp] };
+      save(j); addRow(j); renderVisualizer(); form.reset(); recorridoTmp=[]; renderRecorridoPreview();
+    });
+
+    // Delegación eliminar fila
+    tbody.addEventListener('click', (e)=>{
+      const id=e.target.getAttribute('data-id');
+      if(id && confirm('¿Eliminar '+id+'?')) removeById(id);
+    });
+
+    // ===== Export/Import/Print =====
+    document.getElementById('exportJSON').addEventListener('click',()=>{
+      const data=JSON.parse(localStorage.getItem(KEY)||'[]');
+      if(!data.length) return alert('Nada que exportar');
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a');
+      a.href=url; a.download='viaje_usuario.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),500);
+    });
+
     document.getElementById('importJSON').addEventListener('click',()=>document.getElementById('fileJSON').click());
-    document.getElementById('fileJSON').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const arr=JSON.parse(await f.text());if(!Array.isArray(arr))return alert('El JSON debe ser un arreglo');arr.forEach(x=>{save(x);addRow(x);});renderVisual();}catch(err){alert('Error: '+err.message);}finally{e.target.value='';}});
+    document.getElementById('fileJSON').addEventListener('change',async e=>{
+      const f=e.target.files?.[0]; if(!f) return;
+      try{
+        const arr=JSON.parse(await f.text());
+        if(!Array.isArray(arr)) return alert('El JSON debe ser un arreglo');
+        localStorage.setItem(KEY, JSON.stringify(arr));
+        loadFromStorage();
+      }catch(err){ alert('Error: '+err.message); }
+      finally{ e.target.value=''; }
+    });
+
+    document.getElementById('clearAll').addEventListener('click',()=>{
+      if(confirm('¿Vaciar todo?')){ localStorage.removeItem(KEY); loadFromStorage(); }
+    });
+
     document.getElementById('printBtn').addEventListener('click',()=>window.print());
 
-    loadRows();
-    renderVisual();
+    // ===== Init =====
+    loadFromStorage();
+    renderRecorridoPreview();
   </script>
 </body>
 </html>
